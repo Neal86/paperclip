@@ -5,6 +5,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3101:3100"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.paperclip.rule=Host(`pc.autozon.xyz`)"
+      - "traefik.http.routers.paperclip.entrypoints=http"
+      - "traefik.http.services.paperclip.loadbalancer.server.port=3100"
     environment:
       HOST: "0.0.0.0"
       PAPERCLIP_HOME: "/paperclip"
@@ -12,8 +17,9 @@ services:
       ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
       PAPERCLIP_DEPLOYMENT_MODE: "authenticated"
       PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
-      PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL:-http://localhost:3101}"
+      PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL:-http://pc.autozon.xyz}"
       BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set}"
+      TZ: "Asia/Shanghai"
     volumes:
       - "paperclip_data:/paperclip"
 
