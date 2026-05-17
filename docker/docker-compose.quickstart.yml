@@ -4,7 +4,7 @@ services:
       context: ..
       dockerfile: Dockerfile
     ports:
-      - "3101:3100"
+      - "3102:3100"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.paperclip.rule=Host(`pc.autozon.xyz`)"
