@@ -3,32 +3,22 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-
     ports:
       - "3102:3100"
-
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.paperclip.rule=Host(`pc.autozon.xyz`)"
-      - "traefik.http.routers.paperclip.entrypoints=websecure"
-      - "traefik.http.routers.paperclip.tls=true"
-      - "traefik.http.routers.paperclip.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.paperclip.entrypoints=http"
       - "traefik.http.services.paperclip.loadbalancer.server.port=3100"
-
     environment:
       HOST: "0.0.0.0"
       PAPERCLIP_HOME: "/paperclip"
-
       OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
       ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
-
       PAPERCLIP_DEPLOYMENT_MODE: "authenticated"
       PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
-
-      PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL:-https://pc.autozon.xyz}"
-
+      PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL:-http://pc.autozon.xyz}"
       BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set}"
-
     volumes:
       - "paperclip_data:/paperclip"
 
