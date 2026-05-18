@@ -10,8 +10,6 @@ services:
     labels:
       - "traefik.enable=true"
 
-      - "traefik.docker.network=coolify"
-
       - "traefik.http.routers.paperclip.rule=Host(`pc.autozon.xyz`)"
 
       - "traefik.http.routers.paperclip.entrypoints=http,https"
@@ -22,7 +20,6 @@ services:
 
     environment:
       HOST: "0.0.0.0"
-
       PAPERCLIP_HOME: "/paperclip"
 
       OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
@@ -38,12 +35,5 @@ services:
     volumes:
       - "paperclip_data:/paperclip"
 
-    networks:
-      - coolify
-
 volumes:
   paperclip_data:
-
-networks:
-  coolify:
-    external: true
