@@ -1,7 +1,7 @@
 services:
   paperclip:
     build:
-      context: ..
+      context: .
       dockerfile: Dockerfile
     ports:
       - "3102:3100"
