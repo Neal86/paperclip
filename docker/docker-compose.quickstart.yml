@@ -1,4 +1,14 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: paperclip
+      POSTGRES_USER: paperclip
+      POSTGRES_PASSWORD: paperclip_password_change_me
+    volumes:
+      - paperclip_postgres_data:/var/lib/postgresql/data
+
   paperclip:
     build:
       context: .
@@ -9,31 +19,33 @@ services:
 
     labels:
       - "traefik.enable=true"
-
       - "traefik.http.routers.paperclip.rule=Host(`pc.autozon.xyz`)"
-
       - "traefik.http.routers.paperclip.entrypoints=http,https"
-
       - "traefik.http.routers.paperclip.tls.certresolver=letsencrypt"
-
       - "traefik.http.services.paperclip.loadbalancer.server.port=3100"
 
     environment:
       HOST: "0.0.0.0"
+      PORT: "3100"
       PAPERCLIP_HOME: "/paperclip"
+
+      DATABASE_URL: "postgres://paperclip:paperclip_password_change_me@postgres:5432/paperclip"
 
       OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
       ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
 
       PAPERCLIP_DEPLOYMENT_MODE: "authenticated"
       PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
-
       PAPERCLIP_PUBLIC_URL: "https://pc.autozon.xyz"
 
       BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set}"
+
+    depends_on:
+      - postgres
 
     volumes:
       - "paperclip_data:/paperclip"
 
 volumes:
   paperclip_data:
+  paperclip_postgres_data:
